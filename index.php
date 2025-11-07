@@ -1,3 +1,27 @@
+<?php
+session_start();
+
+if( isset($_SESSION['username']) ) {
+    header("Location: dashboard.php");
+    exit;
+}
+
+if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if( $username == 'Shishio' && $password == 'makoto' ) {
+        $_SESSION['username'] = $username;
+        header("Location: dashboard.php");
+        exit;
+    }
+    else {
+        $error = "usernamenya & passwordnya salah ketua";
+    }
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -19,7 +43,6 @@
         }
 
         .login-container {
-            background: #060606ff;
             padding: 40px 50px;
             border-radius: 15px;
             box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
@@ -65,6 +88,12 @@
             background: #6a11cb;
         }
 
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
         .footer {
             margin-top: 15px;
             font-size: 13px;
@@ -84,6 +113,7 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
+        <?php if(isset($error)) { echo "<p class='error'>$error</p>"; } ?>
         <form action="" method="post">
             <input type="text" name="username" placeholder="username" required><br>
             <input type="password" name="password" placeholder="password" required><br>
